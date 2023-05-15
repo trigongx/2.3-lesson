@@ -4,15 +4,23 @@ public class Main {
         bankAccount1.doDeposit(20000);
         System.out.println("Сумма на счете:" + bankAccount1.getAmount());
 
-        try{
-            while (true){
+
+        while (true) {
+            try {
                 bankAccount1.withDraw(6000);
-                System.out.println("Снято 6000 сом. Остаток на счете:" + bankAccount1.getAmount());
+                System.out.println("Снято 6000 сом");
+            } catch (IllegalLimitException e) {
+                try {
+                    bankAccount1.withDraw((int) e.getRemainingAmount());
+                } catch (IllegalLimitException ex) {
+                    ex.printStackTrace();
+                }
             }
-        } catch (IllegalLimitException e){
-            System.out.println("Снято " + e.getRemainingAmount() +
-                    " сом, из-за превышения лимита.Остаток на счете:" +
-                    (bankAccount1.getAmount()-e.getRemainingAmount()));
+            System.out.println(bankAccount1.getAmount());
+            if (bankAccount1.getAmount() == 0) {
+                break;
+            }
+
         }
     }
 }
